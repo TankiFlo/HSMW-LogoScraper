@@ -1,0 +1,4 @@
+( - How to GitHub Download)
+- How to Python install
+- How to Team URLs in die jeweiligen .txt's (maybe extra Ordner für nur .txt's)
+- How to nutzen Scraper
