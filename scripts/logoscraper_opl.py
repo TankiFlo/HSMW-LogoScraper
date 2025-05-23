@@ -26,7 +26,7 @@ def scrape_upcoming_matches(url):
         for div in upcoming_match_div.find_all(class_ = 'img-text'):
             teamId = div.find('img')['src'].split('/')[6]
             url = download_url.replace('<TEAM-ID>', teamId)
-            name = (div.find('img')['alt'] + ".png").replace('/', '') # replace() for sanitization
+            name = (div.find('img')['alt'] + ".png").replace('/', '').replace(':', '') # replace() for sanitization
             download_image(url, name)
 
 def scrape_standings(url):
@@ -37,7 +37,7 @@ def scrape_standings(url):
         for img in standing_table.find_all('img'):
             teamId = img['src'].split('/')[6]
             url = download_url.replace('<TEAM-ID>', teamId)
-            name = (img['alt'] + ".png").replace('/', '') # replace() for sanitization
+            name = (img['alt'] + ".png").replace('/', '').replace(':', '') # replace() for sanitization
             download_image(url, name)
 
 if __name__ == '__main__':
@@ -55,3 +55,6 @@ if __name__ == '__main__':
     with open('../team_urls/team_urls_opl.txt', 'r') as f: # team_urls_opl.txt contains our current OPL teams
         for line in f:
             scrape_upcoming_matches(line.strip())
+    with open('../team_urls/standing_urls_opl.txt', 'r') as f:
+        for line in f:
+            scrape_standings(line.strip())
