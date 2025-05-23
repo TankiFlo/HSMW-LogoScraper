@@ -2,3 +2,7 @@
 **/.idea
 **/.venv
 ideas.txt
+documentation/doc.txt
+**.odt
+**.odt#
+**.pyc
