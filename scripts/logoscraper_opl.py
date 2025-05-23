@@ -1,22 +1,13 @@
 import requests # for GET requests
-import shutil # for writing images
 from bs4 import BeautifulSoup # for searching webpages in an easy way
 import os # for creating the needed directory
+import image_downloader
 
-path = "../logos/LoL/OPL/"
+path = "../logos/OPL/"
 ''' path for the logos '''
 
 download_url = "https://www.opleague.pro/screenshot?url=https%3A%2F%2Fwww.opleague.pro%2Fstyles%2Fmedia%2Fteam%2F<TEAM-ID>%2FLogo_100.webp"
 '''Replace <TEAM-ID> with the team id of the wanted team'''
-
-def download_image(url, name):
-    res = requests.get(url, stream=True)
-    if res.status_code == 200:
-        with open(path + name, 'wb') as f:
-            shutil.copyfileobj(res.raw, f)
-        print('Image sucessfully Downloaded: ', path + name)
-    else:
-        print('Image <- ' + name + ' -> Couldn\'t be retrieved')
 
 def scrape_upcoming_matches(url):
     response = requests.get(url)
@@ -27,7 +18,7 @@ def scrape_upcoming_matches(url):
             teamId = div.find('img')['src'].split('/')[6]
             url = download_url.replace('<TEAM-ID>', teamId)
             name = (div.find('img')['alt'] + ".png").replace('/', '').replace(':', '') # replace() for sanitization
-            download_image(url, name)
+            image_downloader.download_image(url, path, name)
 
 def scrape_standings(url):
     response = requests.get(url)
@@ -38,7 +29,7 @@ def scrape_standings(url):
             teamId = img['src'].split('/')[6]
             url = download_url.replace('<TEAM-ID>', teamId)
             name = (img['alt'] + ".png").replace('/', '').replace(':', '') # replace() for sanitization
-            download_image(url, name)
+            image_downloader.download_image(url, path, name)
 
 if __name__ == '__main__':
     try: # create needed directory
@@ -55,6 +46,7 @@ if __name__ == '__main__':
     with open('../team_urls/team_urls_opl.txt', 'r') as f: # team_urls_opl.txt contains our current OPL teams
         for line in f:
             scrape_upcoming_matches(line.strip())
+
     with open('../team_urls/standing_urls_opl.txt', 'r') as f:
         for line in f:
             scrape_standings(line.strip())

@@ -1,9 +1,9 @@
+import image_downloader
 import requests # for GET requests
-import shutil # for writing images
 from bs4 import BeautifulSoup # for searching webpages in an easy way
 import os # for creating the needed directory
 
-path = "../logos/LoL/PRM/"
+path = "../logos/PRM/"
 ''' path for the logos '''
 
 def scrape_team_page(url):
@@ -25,14 +25,7 @@ def scrape_match_page(url):
         if 'team_logos' in img['src']:
             name = img['alt'] + ".jpg"
             ''' file name for the logos '''
-
-            res = requests.get(img['src'], stream=True)
-            if res.status_code == 200:
-                with open(path + name, 'wb') as f:
-                    shutil.copyfileobj(res.raw, f)
-                print('Image sucessfully Downloaded: ', path + name)
-            else:
-                print('Image <- ' + name + ' -> Couldn\'t be retrieved')
+            image_downloader.download_image(img['src'], path, name)
 
 if __name__ == '__main__':
     try: # create needed directory

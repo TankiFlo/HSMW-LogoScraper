@@ -1,21 +1,11 @@
-import requests # for GET requests
-import shutil # for writing images
+import image_downloader
 import os # for creating the needed directory
 from selenium import webdriver # for getting dynamic webpages
 from bs4 import BeautifulSoup # for searching webpages in an easy way
+import time
 
-
-path = "../logos/LoL/Toornament/"
+path = "../logos/Toornament/"
 ''' path for the logos '''
-
-def download_image(url, name):
-    res = requests.get(url, stream=True)
-    if res.status_code == 200:
-        with open(path + name, 'wb') as f:
-            shutil.copyfileobj(res.raw, f)
-        print('Image sucessfully Downloaded: ', path + name)
-    else:
-        print('Image <- ' + name + ' -> Couldn\'t be retrieved')
 
 def scrape_participants(url):
     options = webdriver.ChromeOptions()
@@ -23,6 +13,7 @@ def scrape_participants(url):
     driver = webdriver.Chrome(options=options)
     url = "https://play.toornament.com/de/tournaments/8635309642524221440/participants/"
     driver.get(url)
+    time.sleep(5)
 
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     team_divs = soup.find_all(class_ = "concerto block custom block")
@@ -31,7 +22,7 @@ def scrape_participants(url):
         img = div.find('img')
         if img is not None:
             text_div = div.find(class_ = "text sized concerto block align-start")
-            download_image(img['src'].replace("medium", "large"), text_div.getText()+".png")
+            image_downloader.download_image(img['src'].replace("medium", "large"), path, text_div.getText()+".png")
 
     driver.quit()
 
