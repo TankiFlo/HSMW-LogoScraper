@@ -3,6 +3,8 @@ import shutil # for writing images
 from bs4 import BeautifulSoup # for searching webpages in an easy way
 import os # for creating the needed directory
 
+from scripts.logoscraper_opl import scrape_standings
+
 path = "../logos/LoL/OPL/"
 ''' path for the logos '''
 
@@ -19,17 +21,6 @@ def download_image(url, name):
         print('Image <- ' + name + ' -> Couldn\'t be retrieved')
 
 def scrape_upcoming_matches(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    upcoming_match_div = soup.find(class_ = 'match-and-event-table__content-container')
-    if upcoming_match_div is not None:
-        for div in upcoming_match_div.find_all(class_ = 'img-text'):
-            teamId = div.find('img')['src'].split('/')[6]
-            url = download_url.replace('<TEAM-ID>', teamId)
-            name = (div.find('img')['alt'] + ".png").replace('/', '') # replace() for sanitization
-            download_image(url, name)
-
-def scrape_standings(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     standing_table = soup.find(class_ = 'event-ranking__container opl-table --type-border --table-scroll')
@@ -55,3 +46,6 @@ if __name__ == '__main__':
     with open('../team_urls/team_urls_opl.txt', 'r') as f: # team_urls_opl.txt contains our current OPL teams
         for line in f:
             scrape_upcoming_matches(line.strip())
+    with open('../team_urls/opl_lowest_league.txt', 'r') as f: # team_urls_opl.txt contains our current OPL teams
+        for line in f:
+            scrape_standings(line.strip())
