@@ -1,6 +1,0 @@
-scrape pictures using scraper
-download (is that necessary?) existing pictures
-compare new and old using hash (hopefully the same or maybe using pixel values at some points?) 
-if different: replace old one
-if not: keep old one
-if new: add to collection (folders (+ table?)
