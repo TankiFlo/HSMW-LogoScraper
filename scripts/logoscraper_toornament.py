@@ -11,7 +11,6 @@ def scrape_participants(url):
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")
     driver = webdriver.Chrome(options=options)
-    url = "https://play.toornament.com/de/tournaments/8635309642524221440/participants/"
     driver.get(url)
     time.sleep(5)
 
